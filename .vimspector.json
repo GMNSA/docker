@@ -1,0 +1,15 @@
+
+{
+  "configurations": {
+    "Python Debug": {
+      "adapter": "debugpy",
+      "configuration": {
+        "request": "launch",
+        "python": "/usr/bin/python3",
+        "program": "main.py",
+        "justMyCode": false
+      }
+    }
+  }
+
+}

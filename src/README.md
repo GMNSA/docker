@@ -173,3 +173,28 @@ To run the command, open a terminal or command prompt and enter the following:
 #### Check that localhost:80/status now returns a page with nginx status
 
 ![part4_9.png](screenshots/part4_9.png)
+
+## Part 5. Dockle.
+
+> The `-rm` option in the `docker run` command is used for automatically removing the container after it has exited. When a container exits or is stopped, the `-rm` flag automatically removes it along with any associated resources.
+
+#### Check the image from the previous task with dockle [image_id|repository]
+* install dockle in docker.
+
+![part5_1.png](screenshots/part5_1.png)
+
+* docker run --rm  -v /var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle my_nginx_part4 (mount dockle to nginx for check.)
+
+![part5_2.png](screenshots/part5_2.png)
+#### Fix the image so that there are no errors or warnings when checking with dockle
+> The `docker alpine` command you provided seems to be incomplete. However, based on the context, it appears that you are referring to running a Docker container based on the Alpine Linux distribution. \
+    **Security**: `Alpine Linux` is attractive for its focus on security. It is equipped with a minimal set of components, which reduces the number of potential vulnerabilities and attacks. In addition, Alpine Linux is actively being updated and patched to maintain the security of attack vectors and provide security updates. \
+    FIX: CIS-DI-0010
+
+![part5_3.png](screenshots/part5_3.png)
+![part5_4_0.png](screenshots/part5_4_0.png)
+![part5_4.png](screenshots/part5_4.png)
+
+## Part 6. Basic Docker Compose
+
+> Docker Compose is a tool that allows you to define and run multi-container Docker applications. It uses a YAML file (commonly named `docker-compose.yml`) to define the services, networks, and volumes required for your application.

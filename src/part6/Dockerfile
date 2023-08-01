@@ -6,9 +6,8 @@ HEALTHCHECK CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 WORKDIR /home
 
 # Копируем зависимости/пакеты проекта в образ
-COPY ./server/nginx.conf                /etc/nginx/nginx.conf
-COPY ./server/main.c                    /home/main.c
-COPY ./compile_run_mini_server.sh       /home/compile_run_mini_server.sh
+COPY ./nginx.conf                       /etc/nginx/nginx.conf
+COPY ./nginx_daemon_off.sh              /home/nginx_daemon_off.sh
 
 # Устанавливаем зависимости проекта
 RUN apk update && apk add --no-cache nginx gcc spawn-fcgi fcgi-dev vim fcgi musl-dev
@@ -20,4 +19,4 @@ RUN chmod -R 0755  /var/run/  /etc/nginx/ /home/ /var/lib/nginx/ /etc/nginx/
 USER nginx
 
 # Запускаем compile_run_mini_server
-CMD ["sh", "/home/compile_run_mini_server.sh"]
+CMD ["sh", "/home/nginx_daemon_off.sh"]

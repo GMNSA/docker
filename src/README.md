@@ -16,17 +16,26 @@ Nginx offers the following features and capabilities:
 #### Take the official docker image from nginx and download it using docker pull.
 > The `docker pull` command is used to pull (download) Docker images from a container registry. This command allows you to obtain images from various sources, such as Docker Hub or private registries, and store them locally on your machine.
 
+* search for nginx docker to install.
+
 ![part1_1.png](screenshots/part1_1.png)
+
+* upload nginx.
+
+![part1_1_1.png](screenshots/part1_1_2.png)
 
 #### Check for the docker image with docker images
 > To list the Docker images that are available on your system, you can use the `docker images` command. This command will display a list of all the Docker images along with their respective details, such as repository, tag, image ID, creation date, and size.
 To run the command, open a terminal or command prompt and enter the following:
+
+* displaying images.
 
 ![part1_2.png](screenshots/part1_2.png)
 
 #### Run docker image with docker run -d [image_id|repository]
 > The `docker run -d` command is used to run a Docker container in detached mode. Detached mode means the container runs in the background without attaching the container's console to the terminal where the `docker run` command was executed.
 
+* running on th background of nginx.
 
 ![part1_3.png](screenshots/part1_3.png)
 
@@ -35,12 +44,16 @@ To run the command, open a terminal or command prompt and enter the following:
 
 #### View container information with docker inspect [container_id|container_name]
 ![part1_5.png](screenshots/part1_5.png)
+
+* separate size, list of mapped ports and container ip.
+
 ![part1_5_1.png](screenshots/part1_5_1.png)
 
 #### Stop docker image with docker stop [container_id|container_name]
 ![part1_6.png](screenshots/part1_6.png)
 
 #### Check that the image has stopped with docker ps
+
 ![part1_7.png](screenshots/part1_7.png)
 
 #### Run docker with mapped ports 80 and 443 on the local machine with run command
@@ -102,7 +115,6 @@ To run the command, open a terminal or command prompt and enter the following:
 
 #### Check that localhost:80/status returns the nginx server status page
 ![part2_13.png](screenshots/part2_13.png)
-![part2_14.png](screenshots/part2_14.png)
 
 ## Part 3. Mini web server
 
@@ -110,8 +122,13 @@ To run the command, open a terminal or command prompt and enter the following:
 > `<fcgi_stdio.h>` is a header file from the FastCGI library that provides functions and macros for working with the FastCGI protocol. FastCGI is a language-independent protocol that allows a web server to communicate with a separate application or service to handle dynamic web content.
 
 ![part3_1.png](screenshots/part3_1.png)
+
+* run nginx on port 81 and give the name nginx_part3.
+
 ![part3_1_1.png](screenshots/part3_1_1.png)
-![part3_1_2.png](screenshots/part3_1_2.png)
+
+* check running containers, exec bash on nginx_part3 and update and install gcc libfcgi-dev spawn-fcgi
+
 ![part3_1_3.png](screenshots/part3_1_3.png)
 
 
@@ -119,6 +136,9 @@ To run the command, open a terminal or command prompt and enter the following:
 > `fastcgi_pass` is a configuration directive in the Nginx server's `nginx.conf` file that specifies where Nginx should forward FastCGI requests. It determines the address to which the FastCGI server expects connections to be made.
 
 ![part3_2.png](screenshots/part3_2.png)
+
+* copy nginx.conf to nginx_part3:/etc/nginx/
+
 ![part3_2_2.png](screenshots/part3_2_2.png)
 
 #### Run the written mini server via spawn-fcgi on port 8080
@@ -156,9 +176,11 @@ To run the command, open a terminal or command prompt and enter the following:
     Port mapping allows you to bind a container's port to a specific port on the host machine. For example, you can run a web server in a container listening on port 80 and map that port to port 8080 on the host. This way, when you access port 8080 on the host, the    traffic will be directed to port 80 inside the container.
     Directory mapping allows you to link a directory inside the container to a specific directory or path on the host machine. This enables file and data sharing between the container and the host. For example, you can map a local directory on the host to a directory  inside the container, so that the container has access to the files, or to store data generated within the container on the host.
 
-> `-v $(pwd)/nginx:/path/inside/container` maps the local directory `./nginx` to the path inside the container.
+* copy nginx.
 
 ![part4_5.png](screenshots/part4_5.png)
+
+> `-v $(pwd)/nginx:/path/inside/container` maps the local directory `./nginx` to the path inside the container.
 
 ![part4_6.png](screenshots/part4_6.png)
 
@@ -189,12 +211,67 @@ To run the command, open a terminal or command prompt and enter the following:
 #### Fix the image so that there are no errors or warnings when checking with dockle
 > The `docker alpine` command you provided seems to be incomplete. However, based on the context, it appears that you are referring to running a Docker container based on the Alpine Linux distribution. \
     **Security**: `Alpine Linux` is attractive for its focus on security. It is equipped with a minimal set of components, which reduces the number of potential vulnerabilities and attacks. In addition, Alpine Linux is actively being updated and patched to maintain the security of attack vectors and provide security updates. \
-    FIX: CIS-DI-0010
+    FIX: CIS-DI-0010 \
+    \
+FIX: CIS-DI-0005. Health statements allow you to monitor the status and availability of the application in the container \
+
+* Fix Docklefile
 
 ![part5_3.png](screenshots/part5_3.png)
+
+* Putting together a fixed project.
+
 ![part5_4_0.png](screenshots/part5_4_0.png)
+
+* Checking.
+
 ![part5_4.png](screenshots/part5_4.png)
 
 ## Part 6. Basic Docker Compose
 
-> Docker Compose is a tool that allows you to define and run multi-container Docker applications. It uses a YAML file (commonly named `docker-compose.yml`) to define the services, networks, and volumes required for your application.
+> Docker Compose is a tool that allows you to define and run multi-container Docker applications. It uses a YAML file (commonly named `docker-compose.yml`) to define the services, networks, and volumes required for your application. \
+> \
+> `proxy_pass` is a configuration directive in Docker used with Nginx to set up a reverse proxy.
+It defines the address of the proxy server to which requests should be forwarded when they come to a specific path. This directive allows transparently redirecting requests inside the Docker network to another service or container.
+
+
+#### Write a docker-compose.yml file, using which:
+#### 1) Start the docker container from Part 5 (it must work on local network, i.e., you don't need to use EXPOSE instruction and map ports to local machine)
+#### Map port 8080 of the second container to port 80 of the local machine
+> EXPOSE -> other containers can access it or establish a connection with it through this port.
+* docker-compose.yml
+
+![part6_3.png](screenshots/part6_3.png)
+
+* dockerfile of proxy.
+
+![part6_1.png](screenshots/part6_1.png)
+
+* nginx.conf of proxy.
+
+![part6_5.png](screenshots/part6_5.png)
+
+* remove the excess.
+
+![part6_4.png](screenshots/part6_4.png)
+
+#### 2) Start the docker container with nginx which will proxy all requests from port 8080 to port 81 of the first container
+#### Build and run the project with the docker-compose build and docker-compose up commands
+
+* docker-compose build
+
+![part6_2.png](screenshots/part6_2.png)
+
+* docker-copose up
+
+![part6_6.png](screenshots/part6_6.png)
+
+#### Check that the browser returns the page you wrote on localhost:80 as before
+
+* check localhost:80
+
+![part6_7.png](screenshots/part6_7.png)
+
+* check localhost:80/status (server) and localhost:80/proxy
+
+![part6_8.png](screenshots/part6_8.png)
